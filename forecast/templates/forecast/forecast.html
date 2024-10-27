@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Прогноз акцій</title>
+
+    <!-- Load Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h1 class="text-center">Прогноз акцій</h1>
+
+      <form method="post" class="mt-4">
+        {% csrf_token %}
+        <div class="form-group">{{ form.as_p }}</div>
+        <button type="submit" class="btn btn-primary">Прогнозувати</button>
+      </form>
+
+      {% if graphic %}
+      <h2 class="mt-5">Прогноз акцій з реальними даними</h2>
+      <img
+        class="img-fluid"
+        src="data:image/png;base64,{{ graphic }}"
+        alt="Графік прогнозу акцій"
+      />
+      {% if forecast_table %}
+      <h3 class="mt-3">Таблиця прогнозу</h3>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Дата</th>
+            <th>Реальна ціна</th>
+            <th>Прогнозована ціна</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in forecast_table %}
+          <tr>
+            <td>{{ row.Date }}</td>
+            <td>{{ row.Real_Price }}</td>
+            <td>{{ row.Predicted_Price }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="alert alert-warning" role="alert">
+        Таблиця прогнозу порожня.
+      </div>
+      {% endif %} {% endif %} {% if graphic_second %}
+      <h2 class="mt-5">Майбутній прогноз акцій</h2>
+      <img
+        class="img-fluid"
+        src="data:image/png;base64,{{ graphic_second }}"
+        alt="Графік майбутнього прогнозу акцій"
+      />
+      {% if forecast_table_second %}
+      <h3 class="mt-3">Таблиця майбутнього прогнозу</h3>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Дата</th>
+            <th>Прогнозована ціна</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in forecast_table_second %}
+          <tr>
+            <td>{{ row.Date }}</td>
+            <td>{{ row.Predicted_Price }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="alert alert-warning" role="alert">
+        Таблиця майбутнього прогнозу порожня.
+      </div>
+      {% endif %} {% endif %}
+    </div>
+
+    <!-- Load Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
